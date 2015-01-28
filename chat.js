@@ -51,14 +51,29 @@
 						});
 						vm.currentPartner={id:8 ,name : 'TestName8'};
 				   }
-				   
-				   vm.initSocket = function(){
-						i
-				   }
-				   vm.sentMsg = function(){
-						var chatContent = {id:0,user:vm.currentUser, content:vm.tempinputs , time : new Date(),partner :vm.currentPartner};
+				   vm.testmsg = function(userid){
+						var chatContent = {id:0,user:vm.currentPartner, content:'testmsg' , time : new Date(),partner :vm.currentUser};
 						vm.chatContents.push(chatContent);
 						vm.currentPartner.readed.push(chatContent);
+				   }
+				   vm.initSocket = function(){
+						
+				   }
+				   vm.sentMsg = function(){
+						avalon.each(vm.contactUsers,function(index,user){
+							var chatContent = {id:0, content:vm.tempinputs , time : new Date()};
+							if(user.id == vm.currentPartner.id) {
+								chatContent.user = vm.currentUser;
+								chatContent.partner = user;
+								user.readed.push(chatContent)
+								vm.chatContents.push(chatContent);
+							}
+							else {
+								chatContent.user = user;
+								chatContent.partner = vm.currentUser;
+								user.unread.push(chatContent)
+							}
+						});
 				   }
 		   });
 		 vmodel.$skipArray=['contactUsers','currentUserid','chatContents','tempinputs'];
